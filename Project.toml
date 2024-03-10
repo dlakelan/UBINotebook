@@ -1,0 +1,7 @@
+[deps]
+ApproxFun = "28f2ccd6-bb30-5033-b560-165f7b14dc2f"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Optimization = "7f7a1694-90dd-40f0-9382-eb1efda571ba"
+StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
