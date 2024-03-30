@@ -60,20 +60,20 @@ let min= 0.1, k= 0.25, maxtax = .7
     tax = (currevenue + min*gdpc*nhous/1e12) / (gdpc * nhous/1e12)
     u0 = [1.0- 1.03*tax,0.01,0.01,0.0,0.0,0.0,0.0]
     earn = collect(0.0:1000.0:1000000.0)
-    p = plot(earn,earn,xlim=(0.0,400e3),ylim=(0.0,400e3),label="y = x visual reference",xlab="Earned Income (Dollars)", ylab="Take Home Income (Dollars)")
-    p = plot!(earn,[min*gdpc + e*(1.0-tax) for e in earn],label="flat tax+UBI")
+    #p = plot(earn,earn,xlim=(0.0,400e3),ylim=(0.0,400e3),label="y = x visual reference",xlab="Earned Income (Dollars)", ylab="Take Home Income (Dollars)")
+    #p = plot!(earn,[min*gdpc + e*(1.0-tax) for e in earn],label="flat tax+UBI")
     opprob = OptimizationProblem(OptimizationFunction(fitness,Optimization.AutoForwardDiff(),cons=revderivconstr),
             u0,parms, 
-            lcons=[0.0,1.0-maxtax],ucons=[0.0,3.0])
-    sol = solve(opprob,Ipopt.Optimizer(); max_wall_time=35.0, print_level=5,output_file="optim.out")
-#    println(sol)
+            lcons=[0.0,1.0-maxtax],ucons=[0.0,10.0])
+    sol = solve(opprob,Ipopt.Optimizer(); max_wall_time=135.0, print_level=5,output_file="optim.out")
+    println(sol)
     revcon=[0.0, 0.0]
     revderivconstr(revcon,sol.u,parms)
     #u0 = sol.u .+ rand(Normal(0.0,.04),7)
-#    println("Revenue constraint: $(revcon[1])")
-#    println("Deriv constraint: $(revcon[2])")
+    println("Revenue constraint: $(revcon[1])")
+    println("Deriv constraint: $(revcon[2])")
     fI,df = coefstofun(sol.u,parms)
-    p = plot!(earn,[fI(e) for e in earn],label="Optimal Tax Curve")
+    #p = plot!(earn,[fI(e) for e in earn],label="Optimal Tax Curve")
     
 end
 
