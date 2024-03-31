@@ -46,7 +46,7 @@ function revderivconstr(constr,u,p)
     fI,df = coefstofun(u,p)
     revactual = mean(i-fI(i) for i in incs) * (nhous/1e12)
     constr[1] = revactual - target
-    mind = minimum(df(i) for i in incs)
+    mind = sum(exp(-5*df(i)) for i in incs)
     constr[2] = mind
     return constr
 end
@@ -64,7 +64,7 @@ let min= 0.1, k= 0.25, maxtax = .7
     #p = plot!(earn,[min*gdpc + e*(1.0-tax) for e in earn],label="flat tax+UBI")
     opprob = OptimizationProblem(OptimizationFunction(fitness,Optimization.AutoForwardDiff(),cons=revderivconstr),
             u0,parms, 
-            lcons=[0.0,1.0-maxtax],ucons=[0.0,10.0])
+            lcons=[0.0,0.0],ucons=[0.0,length(incsamp)])
     sol = solve(opprob,Ipopt.Optimizer(); max_wall_time=135.0, print_level=5,output_file="optim.out")
     println(sol)
     revcon=[0.0, 0.0]
